@@ -1,0 +1,25 @@
+name: Deploy FHDS Theme
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy theme to DreamHost
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /home/edu_drum/edu.fasthandsdrumstudio.com/wp-content/themes/fhds
+            git fetch origin main
+            git checkout main
+            git reset --hard origin/main
+            echo "FHDS theme deployed successfully."
